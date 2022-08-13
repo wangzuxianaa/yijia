@@ -2,7 +2,6 @@
 #include <ros/ros.h>
 #include "common.h"
 #include <json/json.h>
-#include "SerialPort.h"
 
 int main(int argc, char** argv) 
 {

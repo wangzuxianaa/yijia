@@ -17,7 +17,7 @@ class UdpServer
         // 套接字
         int sockfd;
         // 缓冲区
-        char RecvBuff[1024];
+        char RecvBuff[4096];
 
         struct sockaddr_in client;
         // 底盘数据
@@ -50,6 +50,8 @@ class UdpServer
 
         // 16位int转二进制
         std::vector<int> DecToBit(int num);
+
+        inline bool GetChargeFlag() const {return bottdata.ChargerSwitch;}
         
         inline float GetLinear() const {return bottdata.Linear;}
 

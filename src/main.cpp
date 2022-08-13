@@ -8,6 +8,7 @@
 #include <geometry_msgs/Twist.h>
 #include <car_control/agv1.h>  
 #include <car_control/Position.h>
+#include <std_msgs/UInt8.h> 
 
 
 AGVInfo AGV_Info;
@@ -39,12 +40,15 @@ int main(int argc, char** argv)
     ros::Publisher cmd_pub = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 10);
     // 发布定位数据
     ros::Publisher pos_pub = nh.advertise<car_control::Position>("/position", 10);
+    // 发布充电任务
+    ros::Publisher charge_pub = nh.advertise<std_msgs::UInt8>("go_charge", 10);
     // 订阅底盘数据
     ros::Subscriber rosmsg_sub = nh.subscribe("agv_info", 10, rosmsgCallback);
 
 
     geometry_msgs::Twist vel;
     car_control::Position AGVPose;
+    std_msgs::UInt8 charge_flag;
     // UDP Server
     UdpServer server;
 
@@ -56,7 +60,7 @@ int main(int argc, char** argv)
     if(!server.BindAddrAndPort(9090))
         return 0;  
 
-    ros::Rate LoopRate(100);
+    ros::Rate LoopRate(50);
 
     while(ros::ok()) {
         // 将接受到的底盘信息发送，以便server端返回响应数据
@@ -64,12 +68,20 @@ int main(int argc, char** argv)
         // 接受数据
         server.RecvJsonData();
 
-        std::cout << server.GetLinear() << "    " << server.GetAngular() << std::endl;
+        std::cout << server.GetLinear() << "    " << server.GetAngular()<< "      " << server.GetChargeFlag() << std::endl;
 
         // 发布速度
-        vel.angular.z = server.GetAngular();
-        vel.linear.x = server.GetLinear();
-        cmd_pub.publish(vel);
+        if( std::abs(server.GetAngular()) < 1 && std::abs(server.GetLinear() < 0.6)) {
+            vel.angular.z = server.GetAngular();
+            vel.linear.x = server.GetLinear();
+            cmd_pub.publish(vel);
+        }
+    
+        if(server.GetChargeFlag())
+            charge_flag.data = 1;
+        else
+            charge_flag.data = 0;
+        charge_pub.publish(charge_flag);
 
         // 发布小车位置
         AGVPose.AGVx = server.GetPosX();

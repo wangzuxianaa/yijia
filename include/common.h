@@ -61,16 +61,16 @@ struct AGVInfo
 
 struct RequestInfo
 {
-	int PowerState;
-	int Button1State;
-	int ButtonStop;
-	int ChargeState;
-	int MotorLockState;
+	bool PowerState;
+	bool Button1State;
+	bool ButtonStop;
+	bool ChargeState;
+	bool MotorLockState;
 	int Position;
 	int Rotation;
 	int Twist;
-	int AngularVel = 0;
-	int LinearAcc = 0;
+	int AngularVel;
+	int LinearAcc;
 	int PerCent;
 	int Voltage;
 	int Current;
