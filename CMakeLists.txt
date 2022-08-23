@@ -164,7 +164,6 @@ add_library(UdpServer SHARED
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 ## add_executable(taskPlan src/taskPlan.cpp)
-add_executable(test1 src/test.cpp)
 add_executable(AGV_Control src/AGV_Control.cpp)
 add_executable(main src/main.cpp)
 add_executable(UdpClient src/UdpClient.cpp)
@@ -193,8 +192,6 @@ target_link_libraries(AGV_Control
 
 
 
-target_link_libraries(test1 
-${catkin_LIBRARIES})
 #target_link_libraries(UdpServer /usr/local/lib/libjsoncpp.a)
 target_link_libraries(AGV PRIVATE cpr::cpr /usr/local/lib/libjsoncpp.a)
 target_link_libraries(main PRIVATE cpr::cpr UdpServer /usr/local/lib/libjsoncpp.a ${catkin_LIBRARIES})

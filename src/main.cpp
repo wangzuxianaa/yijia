@@ -32,7 +32,7 @@ void rosmsgCallback(const car_control::agv1ConstPtr& msg)
 int main(int argc, char** argv)
 {
     // 开启节点接受设置底盘数据
-    ros::init(argc, argv, "RecvAndPubVel");
+    ros::init(argc, argv, "RecvAndPubData");
 
     ros::NodeHandle nh;
 
@@ -71,12 +71,13 @@ int main(int argc, char** argv)
         std::cout << server.GetLinear() << "    " << server.GetAngular()<< "      " << server.GetChargeFlag() << std::endl;
 
         // 发布速度
-        if( std::abs(server.GetAngular()) < 1 && std::abs(server.GetLinear() < 0.6)) {
+        if( std::abs(server.GetAngular()) < 0.5 && std::abs(server.GetLinear() < 0.4)) {
             vel.angular.z = server.GetAngular();
             vel.linear.x = server.GetLinear();
             cmd_pub.publish(vel);
         }
     
+        // 发布充电状态
         if(server.GetChargeFlag())
             charge_flag.data = 1;
         else
