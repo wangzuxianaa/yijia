@@ -80,9 +80,19 @@ void UdpServer::RecvJsonData()
     
     socklen_t client_len = sizeof(client);
 
+    /* 设置阻塞超时 */
+    struct timeval timeOut;
+    timeOut.tv_sec = 1;                 //设置1s超时
+    timeOut.tv_usec = 0;
+    if (setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &timeOut, sizeof(timeOut)) < 0)
+    {
+        printf("time out setting failed\n");
+    }
+
+
     int r = recvfrom(sockfd, RecvBuff, 4096, 0, (sockaddr*) &client, &client_len);
 
-    if(r < 0) {
+    if(r < 0 && errno == EAGAIN) {
         perror("receive fail");
         return;
     }
@@ -148,14 +158,12 @@ void UdpServer::RecvJsonData()
                 if(val["Position"].asInt() == 0) {
                     jsonwriter["Position"].append(agvpose.x);
                     jsonwriter["Position"].append(agvpose.y);
-                    std::cout << jsonwriter.toStyledString() << std::endl;
                     SendJsonData(jsonwriter);
                 }
             }
             else if(str == "Rotation") {
                 if(val["Rotation"].asInt() == 0) {
                     jsonwriter["Rotation"] = agvpose.yaw;
-                    std::cout << jsonwriter.toStyledString() << std::endl;
                     SendJsonData(jsonwriter);
                 }
             }
@@ -163,7 +171,6 @@ void UdpServer::RecvJsonData()
                 if(val["Twist"].asInt() == 0) {
                     jsonwriter["Twist"].append((float)AGV_Info.Vx / 1000.0);
                     jsonwriter["Twist"].append((float)AGV_Info.Vz);
-                    std::cout << jsonwriter.toStyledString() << std::endl;
                     SendJsonData(jsonwriter);
                 }
             }
@@ -176,7 +183,6 @@ void UdpServer::RecvJsonData()
             else if(str == "Voltage") {
                 if(val["Voltage"].asInt() == 0) {
                      jsonwriter["Voltage"] = (float)AGV_Info.Voltage / 10.0;
-                     std::cout << jsonwriter.toStyledString() << std::endl;
                     SendJsonData(jsonwriter);
                 }
             }

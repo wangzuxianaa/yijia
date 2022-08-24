@@ -9,6 +9,7 @@
 #include <cstring>
 #include <json/json.h>
 #include <vector>
+#include <errno.h>
 #include "common.h"
 
 class UdpServer
@@ -47,6 +48,8 @@ class UdpServer
         void SendJsonData(Json::Value& val);
 
         void SetAGVInfo(AGVInfo& msg);
+
+        inline void ClostSocket() {close(sockfd);}
 
         // 16位int转二进制
         std::vector<int> DecToBit(int num);

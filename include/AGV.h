@@ -12,8 +12,10 @@ public:
 
     ~AGV();
 
+    // 添加任务
     void AddTask(std::string start, std::string goal);
 
+    // 获取小车状态
     void GetStatus();
 };
 

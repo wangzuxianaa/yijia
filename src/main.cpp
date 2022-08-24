@@ -94,6 +94,7 @@ int main(int argc, char** argv)
         ros::spinOnce();
     }
 
+    server.ClostSocket();
     return 0;
     
 }

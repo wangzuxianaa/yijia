@@ -44,9 +44,9 @@ int main()
 {
     AGV AGVInstance;
 
-    // AGVInstance.GetStatus();
+    AGVInstance.GetStatus();
 
-    AGVInstance.AddTask("A2", "A2");
+    // AGVInstance.AddTask("A2", "A2");
 
 
 }
