@@ -34,10 +34,13 @@ void AGV::AddTask(std::string start, std::string goal)
 
 void AGV::GetStatus()
 {
+    Json::Reader reader;
+    Json::Value val;
     cpr::Response response = cpr::Get(cpr::Url{"http://192.168.3.220:9999/api/v1/monitor/get_all_status"});
     std::cout << response.status_code << std::endl;
     // 输出回应文本
-    std::cout << response.text << std::endl;
+    reader.parse(response.text, val);
+    std::cout << val.toStyledString() << std::endl;
 }
 
 int main()

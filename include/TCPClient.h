@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <ros/ros.h>
 
 
 class TCPClient

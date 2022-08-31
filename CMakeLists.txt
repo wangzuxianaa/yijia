@@ -152,9 +152,9 @@ add_library(UdpServer SHARED
   src/UdpServer.cpp
 )
 
-add_library(TCPClient SHARED
-  src/TCPClient.cpp
-)
+# add_library(TCPClient SHARED
+#   src/TCPClient.cpp
+# )
 
 
 
@@ -171,6 +171,8 @@ add_library(TCPClient SHARED
 add_executable(AGV_Control src/AGV_Control.cpp)
 add_executable(RecvAndPubData src/main.cpp)
 add_executable(AGV src/AGV.cpp)
+add_executable(TCPServer src/TCPServer.cpp)
+add_executable(TCPClient src/TCPClient.cpp)
 
 # add_executable(UdpServer src/UdpServer.cpp)
 ## add_executable(TaskPlanner src/TaskPlanner.cpp)

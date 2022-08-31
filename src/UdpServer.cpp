@@ -110,23 +110,31 @@ void UdpServer::RecvJsonData()
             std::string str = member[0];
 
             if(str == "Linear") {
+                pthread_mutex_lock(&UdpRecvMutex);
                 bottdata.Linear = val["Linear"].asFloat();
+                pthread_mutex_unlock(&UdpRecvMutex);
                 SendJsonData(jsonwriter);
             }
             else if(str == "Angular") {
+                pthread_mutex_lock(&UdpRecvMutex);
                 bottdata.Angular = val["Angular"].asFloat();
+                pthread_mutex_unlock(&UdpRecvMutex);
                 SendJsonData(jsonwriter);
             }
             else if(str == "Charger_Switch") {
+                pthread_mutex_lock(&UdpRecvMutex);
                 bottdata.ChargerSwitch = val["Charger_Switch"].asBool();
+                pthread_mutex_unlock(&UdpRecvMutex);
                 SendJsonData(jsonwriter);
             }
 
             if(str == "Final_Pose") {
                 const Json::Value FinalPose = val["Final_Pose"];
+                pthread_mutex_lock(&UdpRecvMutex);
                 agvpose.x = FinalPose[0].asFloat();
                 agvpose.y = FinalPose[1].asFloat();
                 agvpose.yaw = FinalPose[2].asFloat();
+                pthread_mutex_unlock(&UdpRecvMutex);
                 SendJsonData(jsonwriter);
             }
             
@@ -191,9 +199,7 @@ void UdpServer::RecvJsonData()
                     jsonwriter["Current"] = 20.0;
                     SendJsonData(jsonwriter);
                 }
-            }
-
-            
+            }      
         }
     }
     

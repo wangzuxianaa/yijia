@@ -1,6 +1,10 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
+
+// 线程数
+const int Num_Thread = 3;
+
 struct PositionVector{
     double x, y, z;
 };
@@ -75,5 +79,7 @@ struct RequestInfo
 	int Voltage;
 	int Current;
 };
+
+
 
 #endif

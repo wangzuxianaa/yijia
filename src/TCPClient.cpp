@@ -47,7 +47,20 @@ void TCPClient::RecvData()
     }
     else
     {
-        RecvBuff[ret] = '\0';
+        // RecvBuff[ret] = '\0';
         std::cout << "recv:" << RecvBuff << std::endl;
     }
+}
+
+
+int main(int argc, char** argv)
+{
+    TCPClient tcp;
+    if(!tcp.Init("127.0.0.1", 8888))
+        return -1;
+    while(true)
+    {
+        tcp.RecvData();
+    }
+    tcp.CloseSocket();
 }

@@ -29,6 +29,9 @@ class UdpServer
 
         // 回传的底盘信息
         AGVInfo AGV_Info;
+
+        // 线程锁
+        pthread_mutex_t UdpRecvMutex;
         
     public:
         UdpServer();
