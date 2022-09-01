@@ -31,9 +31,16 @@ void rosmsgCallback(const car_control::agv1ConstPtr& msg)
     AGV_Info.Light34 = msg->Light34;
 }
 
-void* UdpRecvInfo(void* UdpRecvData)
+void* UdpRecvInfo(void* args)
 {
+    while(1) {
+        // 将接受到的底盘信息发送，以便server端返回响应数据
+        Udp_Server.SetAGVInfo(AGV_Info);
+        // 接受数据
+        Udp_Server.RecvJsonData();
 
+        std::cout << Udp_Server.GetLinear() << "    " << Udp_Server.GetAngular()<< "      " << Udp_Server.GetChargeFlag() << std::endl;
+    }
 }
 
 int main(int argc, char** argv)
@@ -74,7 +81,7 @@ int main(int argc, char** argv)
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_JOINABLE);
 
-    rc = pthread_create(&thread[0], &attr ,UdpRecvInfo,(void *)&thread_rec);   //收数据
+    rc = pthread_create(&thread[0], &attr ,UdpRecvInfo, nullptr);   //收数据
     if (rc){
         printf("Error:unable to create thread");
         exit(-1);
@@ -83,12 +90,7 @@ int main(int argc, char** argv)
     ros::Rate LoopRate(50);
 
     while(ros::ok()) {
-        // 将接受到的底盘信息发送，以便server端返回响应数据
-        Udp_Server.SetAGVInfo(AGV_Info);
-        // 接受数据
-        Udp_Server.RecvJsonData();
-
-        std::cout << Udp_Server.GetLinear() << "    " << Udp_Server.GetAngular()<< "      " << Udp_Server.GetChargeFlag() << std::endl;
+        
 
         // 发布速度
         if( std::abs(Udp_Server.GetAngular()) < 0.5 && std::abs(Udp_Server.GetLinear() < 0.4)) {

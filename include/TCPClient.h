@@ -13,6 +13,10 @@ class TCPClient
 {
 private:
 	int sockfd;
+	int flag; 
+	int RelativePosX;
+	int RelativePosY;
+	int RelativePosZ;
 	char RecvBuff[1024];
 public:
 
@@ -20,11 +24,19 @@ public:
 
 	~TCPClient();
 
-	bool Init(std::string path, int port);
+	bool Init(const char* path, int port);
 
 	void RecvData();
 
-    void CloseSocket() {close(sockfd);}
+    inline void CloseSocket() const {close(sockfd);}
+
+	inline int GetFlag() const {return flag;}
+
+	inline int GetRelaPosX() const {return RelativePosX;}
+
+	inline int GetRelaPosY() const {return RelativePosY;}
+
+	inline int GetRelaPosZ() const {return RelativePosZ;}
 };
 
 #endif
